@@ -1,0 +1,50 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.5'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'com.epam'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	integrationTestImplementation.extendsFrom implementation, testImplementation
+	integrationTestCompileOnly.extendsFrom compileOnly
+	integrationTestAnnotationProcessor.extendsFrom annotationProcessor
+}
+sourceSets {
+	integrationTest {
+
+		java.srcDir "src/integrationTest/java"
+		compileClasspath += main.output + test.output
+		runtimeClasspath += main.output + test.output
+
+		resources.srcDir "src/integrationTest/resources"
+	}
+}
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation "org.modelmapper:modelmapper:2.3.0"
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	integrationTestImplementation "org.powermock:powermock-api-mockito2:2.0.5"
+	integrationTestImplementation 'org.springframework.security:spring-security-test'
+	integrationTestImplementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
+	integrationTestImplementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"
+	integrationTestImplementation group: 'com.sun.activation', name: 'javax.activation', version: '1.2.0'
+}
+
+test {
+	useJUnitPlatform()
+}
